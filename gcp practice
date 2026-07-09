@@ -1,0 +1,19 @@
+Introduction to Cloud and GCP
+What is Cloud Computing?
+Cloud computing means renting servers, databases, storage, and other services over the internet instead of owning them.
+In simple words:
+"You pay only for what you use. No upfront investment, no maintenance headache."
+Cloud providers: Google Cloud (GCP), Amazon Web Services (AWS), Microsoft Azure
+Traditional IT vs Cloud
+Traditional IT	Cloud (GCP)
+Buy servers upfront	Rent what you need
+Pay for peak capacity	Auto-scale as needed
+Manual setup	Automated provisioning
+High maintenance	Managed by Google
+Created a Google Cloud Platform(GCP) account and understood the billing and payment structure using https://cloud.google.com/free
+Created a new project named as "Booking-dev".
+ Explored the billing account and configured the budget section to understand the cost management. 
+ Enable the required APIs for compute Engine.
+ Understood GCP Account creation project and MFA.
+Learned the relationship between Project, Billing Account and budget.
+Understood why APIs must be enabled before using GCP Services.
