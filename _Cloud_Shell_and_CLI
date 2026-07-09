@@ -1,0 +1,29 @@
+* Activated Cloud Shell.
+ Learned basic gcloud CLI commands.
+ Created a project using the gcloud command.
+ Switched the active project using gcloud config set project.
+ Listed and managed projects using Cloud Shell.
+ Deleted an unwanted project to keep the environment organized.
+ Concepts Learned
+ Relationship between Organization → Billing Account → Project → Resources.
+ Understood why APIs must be enabled before using GCP services.
+ Learned the difference between Project Name, Project ID, and Project Number.
+ Understood that Project ID must be globally unique.
+ Learned the importance of budgets and billing alerts to control cloud costs.
+Commands Practiced
+gcloud projects create
+gcloud config set project
+gcloud projects list
+gcloud config get-value project
+gcloud auth list
+gcloud projects delete
+Interview Takeaways
+ A Project is the logical container for all GCP resources.
+ A Billing Account is linked to projects for tracking and charging usage.
+ Budgets help monitor spending and avoid unexpected costs.
+ APIs must be enabled before a GCP service can be used.
+ Cloud Shell provides a browser-based terminal with the Google Cloud SDK pre-installed.
+Challenges Faced
+ Initially attempted to create a project without defining the PROJECT_ID variable.
+* Learned how to create environment variables using the export command.
+Understood how to manage multiple projects and remove unnecessary ones.
