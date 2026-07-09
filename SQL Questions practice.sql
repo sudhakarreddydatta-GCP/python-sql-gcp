@@ -84,12 +84,10 @@ select * from dept where dept_no=10 or dept_no=20;
 select * from dept where dept_no = 30 or dept_no= 40;
 select * from empy where year(hire_date)='1981';
 select * from empy where year(hire_date)='1970';
-select e.emp_name, d.dept_name, e.salary, (select avg(salary) from empy e2 where e2.dept_no= e.dept_no) as avg_sal
-from empy e join dept d on e.dept_no = d.dept_no order by dept_name;
+select e.emp_name, d.dept_name, e.salary, (select avg(salary) from empy e2 where e2.dept_no= e.dept_no) as avg_sal from empy e join dept d on e.dept_no = d.dept_no order by dept_name;
 select e.emp_name, e.dept_no, d.avg_sal from empy e join(select dept_no, avg(salary) as avg_sal from empy group by dept_no) d on e.dept_no = d.dept_no order by dept_no;
 select * from empy order by salary asc limit 5;
-select e.emp_name AS Employee, e.salary AS Emp_Salary
-from empy e join empy m on e.mgr = m.emp_no where e.salary > m.salary;
+select e.emp_name AS Employee, e.salary AS Emp_Salary from empy e join empy m on e.mgr = m.emp_no where e.salary > m.salary;
 select emp_name from empy where job = 'MANAGER'AND mgr not in (select emp_no from empy where job = 'PRESIDENT');
 select * from empy where dept_no not in (select dept_no from dept);
 SELECT e.*FROM empy e LEFT JOIN dept d ON e.dept_no = d.dept_no WHERE d.dept_no IS NULL;
@@ -107,8 +105,7 @@ select * from empy e right join dept d on e.dept_no = d.dept_no;
 select e.emp_name, d.dept_name from empy e left join dept d on e.dept_no = d.dept_no union
 select e.emp_name, d.dept_name from empy e right join dept d on e.dept_no = d.dept_no;
 select * from ( select emp_name,hire_date, substr(hire_date,1, 2) as first_2_char,salary , substr(salary, length(salary) -1 , 2) as last_2_char from empy) as dummy_table where first_2_char = last_2_char;
-select * from (select emp_name, salary, round(salary * 10/100) as sal_10_per,
-hire_date, date_format(hire_date, '%y') as year_date from empy) as dummy_table
+select * from (select emp_name, salary, round(salary * 10/100) as sal_10_per, hire_date, date_format(hire_date, '%y') as year_date from empy) as dummy_table
 where sal_10_per = year_date;
 select emp_name,concat(lower(substr(emp_name,1,floor(length(emp_name)/2))),upper(substr(emp_name,floor(length(emp_name)/2)+1))) as low_upper from empy;
 select d.dept_name , count(*) from empy e join dept d on e.dept_no = d.dept_no group by d.dept_name having count(*) = length(trim(d.dept_name));
@@ -140,230 +137,115 @@ select * from dept;
 select * from empy order by grade ASC;
 select * from empy where grade = 2 OR grade = 3;
 select * from empy where grade IN (4,5) or job IN ('MANAGER', 'ANALYST');
-select e.emp_no, e.emp_name, e.salary, d.dept_name, e.grade, timestampdiff(year, hire_date,curdate()) as Exp, (e.salary * 12) as annual_salary
-from empy e JOIN dept d ON e.dept_no = d.dept_no where d.dept_no IN (10,20);
+select e.emp_no, e.emp_name, e.salary, d.dept_name, e.grade, timestampdiff(year, hire_date,curdate()) as Exp, (e.salary * 12) as annual_salary from empy e JOIN dept d ON e.dept_no = d.dept_no where d.dept_no IN (10,20);
 select d.*, e.emp_no,emp_name from dept d left join empy e on d.dept_no = e.dept_no;
 select * from empy where salary > (select salary from empy where emp_name = 'BLAKE');
 select * from empy where job = (select job from empy where emp_name = 'ALLEN');
-select emp_name, hire_date from empy
-where hire_date < (select hire_date from empy where emp_name = 'KING');
-select e.emp_name as employeeName, e.hire_date as emp_date , m.emp_name as ManagerName, m.hire_date as mana_date
-from empy e left join empy m on e.mgr = m.emp_no where e.hire_date < m.hire_date;
+select emp_name, hire_date from empy where hire_date < (select hire_date from empy where emp_name = 'KING');
+select e.emp_name as employeeName, e.hire_date as emp_date , m.emp_name as ManagerName, m.hire_date as mana_date from empy e left join empy m on e.mgr = m.emp_no where e.hire_date < m.hire_date;
 select emp_name, job, dept_no from empy where dept_no = 20 AND job IN (select job from empy where dept_no = 10);
 select * from empy where salary IN (select salary from empy where emp_name IN ('FORD','SMITH')) order by salary Desc;
 select emp_name, job from empy where job IN (select job from empy where emp_name = 'MILLER');
 select emp_name, salary from empy where salary > (select salary from empy where emp_name = 'ALLEN');
-select * from empy e join dept d on e.dept_no = d.dept_no
-where (e.hire_date < (select hire_date from empy where emp_name = 'BLAKE')) AND d.loc IN ('BOSTON', 'CHICAGO');
+select * from empy e join dept d on e.dept_no = d.dept_no where (e.hire_date < (select hire_date from empy where emp_name = 'BLAKE')) AND d.loc IN ('BOSTON', 'CHICAGO');
 select * from empy e join dept d on e.dept_no = d.dept_no where e.grade IN (3,4) AND d.dept_name in ('ACCOUNTING', 'RESEARCH') AND e.salary > (select salary from empy where emp_name
-  = 'ALLEN')
-AND (year(current_date())- year(e.hire_date)) > (select year(current_date())- year(hire_date)
-from empy where emp_name = 'SMITH') order by (year(current_date())- year(hire_date)) ASC;
-select * from empy
-where job IN (select job from empy where emp_name in ('SMITH', 'ALLEN'));
-select * from empy where salary IN (select salary from empy where dept_no = 10
-AND job NOT IN (SELECT distinct job FROM empy WHERE dept_no = 20));
-select * from empy e
-where emp_no not in (select emp_no from empy);
+  = 'ALLEN') AND (year(current_date())- year(e.hire_date)) > (select year(current_date())- year(hire_date) from empy where emp_name = 'SMITH') order by (year(current_date())- year(hire_date)) ASC;
+select * from empy where job IN (select job from empy where emp_name in ('SMITH', 'ALLEN'));
+select * from empy where salary IN (select salary from empy where dept_no = 10 AND job NOT IN (SELECT distinct job FROM empy WHERE dept_no = 20));
+select * from empy e where emp_no not in (select emp_no from empy);
 select salary from empy order by salary desc limit 1;
 SELECT MAX(salary) AS highest_salary FROM empy;
 select emp_name, salary from empy where salary = (select max(salary) from empy);
-select e.emp_no, e.emp_name, e.salary, d.dept_name
-from empy e join dept d on e.dept_no = d.dept_no
-where d.dept_name = 'sales' order by salary desc limit 1;
-select e.emp_no, e.emp_name, e.hire_date, e.grade, d.dept_name, d.loc
-from empy e join dept d on e.dept_no = d.dept_no
-where e.grade = 3 and d.loc = 'CHICAGO' order by e.hire_date desc limit 1;
-select * from empy where hire_date < (select hire_date from empy
-where mgr = (select emp_no from empy where emp_name = 'KING')
-order by hire_date desc limit 1);
+select e.emp_no, e.emp_name, e.salary, d.dept_name from empy e join dept d on e.dept_no = d.dept_no where d.dept_name = 'sales' order by salary desc limit 1;
+select e.emp_no, e.emp_name, e.hire_date, e.grade, d.dept_name, d.loc from empy e join dept d on e.dept_no = d.dept_no where e.grade = 3 and d.loc = 'CHICAGO' order by e.hire_date desc limit 1;
+select * from empy where hire_date < (select hire_date from empy where mgr = (select emp_no from empy where emp_name = 'KING')order by hire_date desc limit 1);
 select * from empy where year(hire_date) = '1981' order by hire_date asc;
 select * from empy where year(hire_date) = '1981' order by hire_date asc limit 1;
-select * from empy where year(hire_date) = '1981' and job = (select job from empy where year(hire_date) = '1981'
-order by hire_date asc limit 1);
-select emp_no, emp_name, grade from empy where mgr = (select emp_no from empy where emp_name = 'KING')
-and grade > 3 order by hire_date asc limit 1;
+select * from empy where year(hire_date) = '1981' and job = (select job from empy where year(hire_date) = '1981' order by hire_date asc limit 1);
+select emp_no, emp_name, grade from empy where mgr = (select emp_no from empy where emp_name = 'KING') and grade > 3 order by hire_date asc limit 1;
 select sum(salary) from empy where job = 'MANAGER';
 select job,sum(salary * 12) as annual_salary_by_specific_job from empy where year(hire_date) = '1981' group by job;
 select sum(salary) from empy where grade = 3;
 select avg(salary) from empy where job = 'CLERK';
 select * from empy where dept_no = 20 and salary > (select avg(salary) from empy where dept_no = 10);
 select dept_no, job, count(job) from empy group by dept_no,job;
-select mgr, count(mgr) from empy
-where mgr is not null group by mgr order by mgr;
-select d.dept_no, d.dept_name, count(e.emp_no) from dept d join empy e on d.dept_no = e.dept_no
-group by d.dept_no, d.dept_name having count(e.emp_no) >= 2;
+select mgr, count(mgr) from empy where mgr is not null group by mgr order by mgr;
+select d.dept_no, d.dept_name, count(e.emp_no) from dept d join empy e on d.dept_no = e.dept_no group by d.dept_no, d.dept_name having count(e.emp_no) >= 2;
 select grade, count(emp_no), max(salary) from empy group by grade;
-select d.dept_name,e.grade,count(e.emp_no) as no_of_clecks
-from empy e join dept d on e.dept_no = d.dept_no where e.job = 'CLERK'
-group by d.dept_name,e.grade having count(e.emp_no) >= 2;
-select d.dept_name, count(e.emp_no) as emp_count
-from dept d join empy e on d.dept_no = e.dept_no
-group by d.dept_name order by emp_count desc limit 1;
+select d.dept_name,e.grade,count(e.emp_no) as no_of_clecks from empy e join dept d on e.dept_no = d.dept_no where e.job = 'CLERK' group by d.dept_name,e.grade having count(e.emp_no) >= 2;
+select d.dept_name, count(e.emp_no) as emp_count from dept d join empy e on d.dept_no = e.dept_no group by d.dept_name order by emp_count desc limit 1;
 select * from empy where mgr = (select emp_no from empy where emp_name = 'JONES');
-select *, (salary + salary * 20/100) as sal_aft_incr
-from empy where (salary + salary * 20/100) > 3000;
-select e.emp_no, e.emp_name, d.dept_name from dept d join empy e on d.dept_no =
-e.dept_no;
+select *, (salary + salary * 20/100) as sal_aft_incr from empy where (salary + salary * 20/100) > 3000;
+select e.emp_no, e.emp_name, d.dept_name from dept d join empy e on d.dept_no =e.dept_no;
 select * from empy e join dept d on d.dept_no = e.dept_no where d.dept_name <> 'SALES';
-select e.emp_name, d.dept_no, e.salary, e.comm from empy e join dept d on d.dept_no =
-e.dept_no where e.salary between 2000 and 5000 and d.loc = 'CHICAGO';
-select e.emp_name,e.salary,m.emp_name,m.salary
-from empy e left join empy m on e.mgr = m.emp_no where e.salary > m.salary;
-select grade, emp_name from empy
-where dept_no in (10, 30) and grade <> 4 and hire_date < '1982-12-31';
-select emp_name, salary from empy where emp_name = 'FORD'
-and salary = (select round(avg(salary)) from empy
-where grade = (select grade from empy where emp_name = 'FORD'));
-select e.dept_no, e.emp_name, e.job, d.dept_name, e.salary, e.grade
-from empy e join dept d on e.dept_no = d.dept_no;
-select e.emp_name, e.job, e.salary, e.grade, d.dept_name from empy e join dept d
-on e.dept_no = d.dept_no where e.job <> 'CLERK' order by salary desc;
+select e.emp_name, d.dept_no, e.salary, e.comm from empy e join dept d on d.dept_no = e.dept_no where e.salary between 2000 and 5000 and d.loc = 'CHICAGO';
+select e.emp_name,e.salary,m.emp_name,m.salary from empy e left join empy m on e.mgr = m.emp_no where e.salary > m.salary;
+select grade, emp_name from empy where dept_no in (10, 30) and grade <> 4 and hire_date < '1982-12-31';
+select emp_name, salary from empy where emp_name = 'FORD'and salary = (select round(avg(salary)) from empy where grade = (select grade from empy where emp_name = 'FORD'));
+select e.dept_no, e.emp_name, e.job, d.dept_name, e.salary, e.grade from empy e join dept d on e.dept_no = d.dept_no;
+select e.emp_name, e.job, e.salary, e.grade, d.dept_name from empy e join dept d on e.dept_no = d.dept_no where e.job <> 'CLERK' order by salary desc;
 select emp_name, job from empy where mgr is null;
-select * from (
-select e.emp_name, d.dept_name, e.salary,
-dense_rank() over (PARTITION BY d.dept_name order by e.salary desc) as grade
-from empy e join dept d on e.dept_no = d.dept_no
-order by dept_name asc , salary desc
-) as emp_high_dept where grade = 1;
-
-select emp_name from empy
-where salary = (select round((max(salary) + min(salary))/2) as avg_salary from empy);
+select * from (select e.emp_name, d.dept_name, e.salary, dense_rank() over (PARTITION BY d.dept_name order by e.salary desc) as grade from empy e join dept d on e.dept_no = d.dept_no
+order by dept_name asc , salary desc) as emp_high_dept where grade = 1;
+select emp_name from empy where salary = (select round((max(salary) + min(salary))/2) as avg_salary from empy);
 select dept_no, count(*) from empy group by dept_no having count(*) > 3;
-select d.dept_name from
-empy e join dept d on e.dept_no = d.dept_no
-group by d.dept_name having count(*) >= 3;
-SELECT DISTINCT m.emp_no, m.emp_name, m.salary
-FROM empy m
-JOIN empy e ON m.emp_no = e.mgr
-GROUP BY m.emp_no, m.emp_name, m.salary
-HAVING m.salary > AVG(e.salary);
-select e.emp_name emp, e.salary e_sal
-from empy e join empy m on e.mgr = m.emp_no
-where e.salary < m.salary and
-e.salary > any (SELECT salary FROM empy where emp_no in
+select d.dept_name from empy e join dept d on e.dept_no = d.dept_no group by d.dept_name having count(*) >= 3;
+SELECT DISTINCT m.emp_no, m.emp_name, m.salary FROM empy m JOIN empy e ON m.emp_no = e.mgr GROUP BY m.emp_no, m.emp_name, m.salary HAVING m.salary > AVG(e.salary);
+select e.emp_name emp, e.salary e_sal from empy e join empy m on e.mgr = m.emp_no where e.salary < m.salary and e.salary > any (SELECT salary FROM empy where emp_no in
 (select distinct mgr from empy) and emp_no != m.emp_no);
-select e.emp_name, d.dept_name, e.salary, (select avg(salary) from empy e2 where e2.dept_no
-= e.dept_no) as avg_sal
-from empy e join dept d on e.dept_no = d.dept_no order by dept_name;
-select e.emp_name, e.dept_no, d.avg_sal
-from empy e join
-(select dept_no, avg(salary) as avg_sal from empy group by dept_no) d
-on e.dept_no = d.dept_no order by dept_no;
+select e.emp_name, d.dept_name, e.salary, (select avg(salary) from empy e2 where e2.dept_no = e.dept_no) as avg_sal from empy e join dept d on e.dept_no = d.dept_no order by dept_name;
+select e.emp_name, e.dept_no, d.avg_sal from empy e join (select dept_no, avg(salary) as avg_sal from empy group by dept_no) d on e.dept_no = d.dept_no order by dept_no;
 select * from empy order by salary asc limit 5;
-select e.emp_name AS Employee, e.salary AS Emp_Salary
-from empy e join empy m on e.mgr = m.emp_no where e.salary > m.salary;
-select * , date_add(hire_date, interval 20 year) as aft_20_yrs from empy
-where date_add(hire_date, interval 20 year) > str_to_date('31-dec-89', '%d-%b-%Y');
+select e.emp_name AS Employee, e.salary AS Emp_Salary from empy e join empy m on e.mgr = m.emp_no where e.salary > m.salary;
+select * , date_add(hire_date, interval 20 year) as aft_20_yrs from empy where date_add(hire_date, interval 20 year) > str_to_date('31-dec-89', '%d-%b-%Y');
 select * from empy where salary LIKE '___';
 select * from empy where date_format(hire_date, '%b') = 'dec';
-SELECT * FROM empy
-WHERE MONTH(hire_date) = 12;
+SELECT * FROM empy WHERE MONTH(hire_date) = 12;
 select * from empy where emp_name LIKE '%a%';
 select emp_name, dept_name from empy e inner join dept d on e.dept_no = d.dept_no;
 select * from empy e left join dept d on e.dept_no = d.dept_no;
-select e.emp_name, d.dept_name from empy e left join dept d on e.dept_no = d.dept_no
-union
+select e.emp_name, d.dept_name from empy e left join dept d on e.dept_no = d.dept_no union
 select e.emp_name, d.dept_name from empy e right join dept d on e.dept_no = d.dept_no;
-select * from (
-select emp_name,
-hire_date, substr(hire_date,1, 2) as first_2_char,
-salary , substr(salary, length(salary) -1 , 2) as last_2_char
-from empy
-) as dummy_table where first_2_char = last_2_char;
-select * from (select emp_name, salary, round(salary * 10/100) as sal_10_per,
-hire_date, date_format(hire_date, '%y') as year_date from empy) as dummy_table
-where sal_10_per = year_date;
-select emp_name,
-concat(lower(substr(emp_name,1,floor(length(emp_name)/2))),
-upper(substr(emp_name,floor(length(emp_name)/2)+1))) as low_upper from empy;
-select d.dept_name , count(*) from empy e join dept d on e.dept_no = d.dept_no
-group by d.dept_name having count(*) = length(trim(d.dept_name));
+select * from (select emp_name,hire_date, substr(hire_date,1, 2) as first_2_char,salary , substr(salary, length(salary) -1 , 2) as last_2_char from empy) as dummy_table where first_2_char = last_2_char;
+select * from (select emp_name, salary, round(salary * 10/100) as sal_10_per, hire_date, date_format(hire_date, '%y') as year_date from empy) as dummy_table where sal_10_per = year_date;
+select emp_name, concat(lower(substr(emp_name,1,floor(length(emp_name)/2))), upper(substr(emp_name,floor(length(emp_name)/2)+1))) as low_upper from empy;
+select d.dept_name , count(*) from empy e join dept d on e.dept_no = d.dept_no group by d.dept_name having count(*) = length(trim(d.dept_name));
 select emp_no, emp_name, hire_date from empy where day(hire_date) < 15;
 select * from empy where job = 'MANAGER';
-select d.dept_name, count(*) as no_of_emp
-from empy e join dept d on e.dept_no = d.dept_no
-group by dept_name order by no_of_emp desc limit 1;
-select emp_name, hire_date from empy
-where hire_date = (select hire_date from empy group by hire_date having count(hire_date) > 1);
+select d.dept_name, count(*) as no_of_emp from empy e join dept d on e.dept_no = d.dept_no group by dept_name order by no_of_emp desc limit 1;
+select emp_name, hire_date from empy where hire_date = (select hire_date from empy group by hire_date having count(hire_date) > 1);
 use dataengineer;
-select emp_name, hire_date from empy
-where hire_date = (select hire_date from empy group by hire_date having count(hire_date) > 1);
-select e.emp_name from empy e join empy e1 on e.hire_date = e1.hire_date WHERE
-e.emp_no <> e1.emp_no;
-select emp_name, grade
-from empy where grade in (select distinct round(dept_no/10)
-from dept where dept_name = 'sales');
-select dept_name, count(*) from empy e join dept d
-on e.dept_no = d.dept_no group by dept_name having count(*) >
-(select round(count(*)/count(distinct dept_no)) as avg_no_emp_in_dept from empy);
-select m.emp_name as manager , count(e.emp_name) as no_of_emp
-from empy e join empy m on e.mgr = m.emp_no group by m.emp_name order by no_of_emp
-desc limit 1;
+select emp_name, hire_date from empy where hire_date = (select hire_date from empy group by hire_date having count(hire_date) > 1);
+select e.emp_name from empy e join empy e1 on e.hire_date = e1.hire_date WHERE e.emp_no <> e1.emp_no;
+select emp_name, grade from empy where grade in (select distinct round(dept_no/10) from dept where dept_name = 'sales');
+select dept_name, count(*) from empy e join dept d on e.dept_no = d.dept_no group by dept_name having count(*) >(select round(count(*)/count(distinct dept_no)) as avg_no_emp_in_dept from empy);
+select m.emp_name as manager , count(e.emp_name) as no_of_emp from empy e join empy m on e.mgr = m.emp_no group by m.emp_name order by no_of_empdesc limit 1;
 select emp_name, salary , round((salary + salary * 15/100) / 85) as Dollor from empy;
 select emp_name , job , concat(emp_name,'_AND_',job) from empy;
 select concat(emp_name, ' ( ', job, ' )') as concat_emp_dept from empy;
 select emp_name, date_format(hire_date, '%M %d , %Y') from empy;
-select emp_name, salary,
-case
-when salary > 1500 then 'Just Salary'
-when salary = 1500 then 'On Target'
-else 'Below 1500'
-end as salary_ana
-from empy;
+select emp_name, salary, case when salary > 1500 then 'Just Salary' when salary = 1500 then 'On Target' else 'Below 1500' end as salary_ana from empy;
 select emp_name, hire_date, dayofweek(hire_date) as day_of_week from empy;
-select emp_no, emp_name, hire_date,
-case
-when day(hire_date) < 15 then
-LAST_DAY(hire_date)
-when day(hire_date) > 15 then
-'Hi'
-end as first_pay_date
-from empy order by hire_date;
+select emp_no, emp_name, hire_date,case when day(hire_date) < 15 then LAST_DAY(hire_date) when day(hire_date) > 15 then'Hi'end as first_pay_date from empy order by hire_date;
 select * from Empy where MOD(Salary, 1) <> 0;
 select * from empy where substr(salary, 1 , 1) = substr(dept_no, 1 , 1);
-select m.emp_name, m.salary, m.emp_no, e.emp_name , e.salary ,e.mgr
-from empy e join empy m on e.mgr = m.emp_no
-where e.salary > m.salary;
-select m.emp_name, e.emp_name
-from empy e join empy m on e.mgr = m.emp_no where m.emp_name = 'BLAKE';
-select mm.emp_name as manegers_manager, m.emp_name as manager , e.emp_name as
-employee
-from empy e join empy m on e.mgr = m.emp_no join empy mm on m.mgr = mm.emp_no where
+select m.emp_name, m.salary, m.emp_no, e.emp_name , e.salary ,e.mgr from empy e join empy m on e.mgr = m.emp_no where e.salary > m.salary;
+select m.emp_name, e.emp_name from empy e join empy m on e.mgr = m.emp_no where m.emp_name = 'BLAKE';
+select mm.emp_name as manegers_manager, m.emp_name as manager , e.emp_name as employee from empy e join empy m on e.mgr = m.emp_no join empy mm on m.mgr = mm.emp_no where
 m.emp_name = 'JONES';
-select emp_name , salary , (salary * 12) as annual_salary ,
-if((salary * 12) > 30000 , 'ABOVE 30000', salary) as annual_30000 from empy;
+select emp_name , salary , (salary * 12) as annual_salary ,if((salary * 12) > 30000 , 'ABOVE 30000', salary) as annual_30000 from empy;
 select count(*) as count_of_manager from empy where job = 'manager' group by job;
 select emp_no , count(*) as duplicate from empy group by emp_no having count(*) > 1;
 select emp_no, emp_name, salary from empy where salary < 1000 order by salary;
-select e.emp_name, e.job, (e.salary * 12) as annual_sal, d.dept_no, d.dept_name, e.grade
-from empy e join dept d on e.dept_no = d.dept_no where (e.salary * 12 = 36000 or job <>
+select e.emp_name, e.job, (e.salary * 12) as annual_sal, d.dept_no, d.dept_name, e.grade from empy e join dept d on e.dept_no = d.dept_no where (e.salary * 12 = 36000 or job <>
 'CLERK');
-select e.emp_name , e.hire_date, m.emp_name, m.hire_date
-from empy e join empy m on e.mgr = m.emp_no where e.hire_date < m.hire_date;
-select e.emp_name , e.hire_date, m.emp_name, m.emp_no
-from empy e left join empy m on e.mgr = m.emp_no;
-select emp_name, salary,job from (select emp_name, salary, job,
-dense_rank() over (partition by job order by salary asc) as rank_given
-from empy
-) as dummpy where rank_given = 1 ORDER BY job ASC;
-select * from (select emp_name, salary, job,
-dense_rank() over (partition by job order by salary desc) as rank_given
-from empy
-) as dummpy where rank_given = 1 order by salary desc;
-select * from(
-select dept_no,hire_date,
-dense_rank() over (partition by dept_no order by hire_date desc) as ranking
-from empy group by dept_no,hire_date order by dept_no asc
-) as new_table where ranking = 1;
+select e.emp_name , e.hire_date, m.emp_name, m.hire_date from empy e join empy m on e.mgr = m.emp_no where e.hire_date < m.hire_date;
+select e.emp_name , e.hire_date, m.emp_name, m.emp_no from empy e left join empy m on e.mgr = m.emp_no;
+select emp_name, salary,job from (select emp_name, salary, job, dense_rank() over (partition by job order by salary asc) as rank_given from empy) as dummpy where rank_given = 1 ORDER BY job ASC;
+select * from (select emp_name, salary, job, dense_rank() over (partition by job order by salary desc) as rank_given from empy) as dummpy where rank_given = 1 order by salary desc;
+select * from(select dept_no,hire_date, dense_rank() over (partition by dept_no order by hire_date desc) as ranking from empy group by dept_no,hire_date order by dept_no asc) as new_table where ranking = 1;
 select dept_no from dept where dept_no not in (select distinct dept_no from empy);
-select e.emp_name, e.dept_no, e.job, e.salary,
-(select avg(salary) from empy e1 where e1.dept_no = e.dept_no) as avg_sal
-from empy e group by emp_name, dept_no, job, salary order by dept_no asc;
-select job, avg(salary) as avg_sal
-from empy e where job <> 'president' group by job order by avg_sal desc limit 1;
-select * from empy where salary = (select max(salary) from empy) or comm = (select
-max(comm) from empy);
-select emp_name, dept_no , job, salary from empy where dept_no <> 10 and
-job in (select job from empy where dept_no = 10) and
-salary in (select salary from empy where dept_no = 10);
+select e.emp_name, e.dept_no, e.job, e.salary, (savg(salary) from empy e1 where e1.dept_no = e.dept_no) as avg_sal from empy e group by emp_name, dept_no, job, salary order by dept_no asc;
+select job, avg(salary) as avg_sal from empy e where job <> 'president' group by job order by avg_sal desc limit 1;
+select * from empy where salary = (select max(salary) from empy) or comm = (select max(comm) from empy);
+select emp_name, dept_no , job, salary from empy where dept_no <> 10 and job in (select job from empy where dept_no = 10) and salary in (select salary from empy where dept_no = 10);
