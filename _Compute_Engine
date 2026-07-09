@@ -1,0 +1,31 @@
+gcloud compute instances list
+
+gcloud compute ssh my-first-vm --zone=asia-south1-a
+
+gcloud config get-value project
+
+Mistakes & Learnings
+
+Initially used incorrect SSH syntax (--zone-asia-south1-a).
+Corrected it to --zone=asia-south1-a.
+Learned that carefully reading error messages helps resolve issues quickly.
+
+Interview Takeaways
+
+Compute Engine provides virtual machines with configurable machine types.
+IAM controls access to cloud resources.
+SSH is used to securely connect to Linux VM instances.
+Cloud Shell provides a preconfigured environment for managing GCP resources.
+Hands-on Completed
+
+Installed Nginx on a Compute Engine VM.
+Enabled the Nginx service to start automatically after VM reboot.
+Learned basic Linux package management using apt.
+Understood Linux service management using systemctl.
+
+Commands Practiced
+
+sudo apt update
+sudo apt install -y nginx
+sudo systemctl enable nginx
+sudo systemctl status nginx
