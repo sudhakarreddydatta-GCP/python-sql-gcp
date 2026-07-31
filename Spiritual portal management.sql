@@ -1,4 +1,3 @@
-
 create database test_portal;
 use test_portal;
 create table students (id int primary key auto_increment, name varchar(100));
