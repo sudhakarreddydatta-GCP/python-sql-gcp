@@ -1,0 +1,21 @@
+1.Create a GCS bucket
+* Go to Cloud Storage-----Buckets
+* Create a bucket with a unique name and regional location.
+* Upload a sample file (ex: hello.txt)
+2. Create a Service Account
+* Go to IAM & Admin---- Service Accounts
+* Create a new service account(gcs-demo-sa).
+* Assign the Storage Object Admin role.
+3. Launch a Compute Engine VM
+* Go to Compute Engine---- VM Instances.
+* Create a VM(gcs-demo-vm) in the same region.
+* Attach the service account for GCS access.
+4. Access GCS from the VM
+* SSH into the VM from the console.
+* Use gcloud storage ls to list bucket files
+* Download and upload files between VM and bucket.
+5. Cleanup
+* Delete the VM.
+* Delete the bucket.
+* Delete the Service Account.
+* (Or delete the entire project if it was created just for this practice).
