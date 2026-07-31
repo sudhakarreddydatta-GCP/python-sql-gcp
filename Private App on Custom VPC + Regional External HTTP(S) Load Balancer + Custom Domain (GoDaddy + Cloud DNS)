@@ -1,0 +1,117 @@
+Private App on Custom VPC + Regional External HTTP(S) Load Balancer + Custom Domain (GoDaddy + Cloud DNS)
+Step no 1: Create a Project Spiritual portal
+Step no 2: Enable Compute Engine API
+Step no 3: Create VPC Network. Enter the VPC Network name and select the subnet type 1. Custom 2,Automate
+           1.Custom: If i select custom subnet, we want to add subnet and give name (app-subnet), region, IP stack type.
+           2.Automatic: If i select Automatic subnet, I have created another subnet name( nat-subnet), region, IP stack type.
+
+Step no 4: Go for cloud NAT. and create a new cloud NAT and give options like vpc network and region.
+Step no 5: Select Firewall.I have created two firewall rules, one is for health check and second one is proxy.
+Step no 6: Create a new instance template 1. instance name 2.region 3.Type of machine for workload:
+           e2-micro (2 vCPU, 1 core, 1 GB memory) 4. VM provisional model :SPOT, 5.Firewall: Allow firewall traffic 6.Network interphase:
+           network name :prod-vpc1, subnetwork, subnetwork,7. Management:startup script:Enable and start service
+           systemctl daemon-reload
+           systemctl enable --now flask.service
+Step no 7: Instance group: Create a instance group.create instance when we open that instance using ssh brower and it will be           automatically connect through vm.
+chatgpt: steps
+
+Step 1: Create a GCP Project
+Create a new Google Cloud project.
+Project Name: Spiritual Portal
+Step 2: Enable Required APIs
+Enable the Compute Engine API.
+Verify that the API is enabled before creating Compute Engine resources.
+Step 3: Create a VPC Network
+Go to VPC Network → Create VPC Network
+Provide:
+VPC Name: prod-vpc1
+Choose one of the following subnet modes:
+Option 1: Custom Mode
+Create your own subnet.
+Example:
+Subnet Name: app-subnet
+Region: asia-south1
+IP Stack Type: IPv4 (or IPv4/IPv6 if required)
+CIDR Range: e.g., 10.10.0.0/24
+Option 2: Automatic Mode
+Google automatically creates subnets in all regions.
+Step 4: Create Cloud NAT
+Go to:
+Network Services → Cloud NAT
+Create a new Cloud NAT and configure:
+NAT Gateway Name
+Region
+VPC Network
+Cloud Router
+Purpose:
+Cloud NAT allows private VM instances (without external IPs) to access the internet for software updates and package downloads.
+Step 5: Configure Firewall Rules
+Go to:
+VPC Network → Firewall
+Create firewall rules such as:
+Health Check Rule
+Allow Google's health check IP ranges.
+Used by Load Balancer.
+Proxy Rule
+Allow traffic from Load Balancer proxies to backend instances.
+Common interview ports:
+SSH → Port 22
+HTTP → Port 80
+HTTPS → Port 443
+Step 6: Create an Instance Template
+Configure:
+Instance Template Name
+Region
+Machine Type
+Example:
+e2-micro
+2 vCPU
+1 GB Memory
+Configure:
+VPC Network
+Subnet
+Service Account
+Firewall Tags
+Startup Script:
+#!/bin/bash
+systemctl daemon-reload
+systemctl enable --now flask.service
+The startup script automatically starts the Flask application whenever a VM is created from the template.
+Step 7: Create a Managed Instance Group (MIG)
+Create a Managed Instance Group using the Instance Template.
+Configure:
+Group Name
+Region
+Instance Template
+Minimum Number of Instances
+Autoscaling (Optional)
+Purpose:
+Automatically creates VM instances.
+Recreates unhealthy instances.
+Supports Auto Scaling.
+Integrates with Load Balancer.
+Overall Architecture
+Users
+   │
+Load Balancer
+   │
+Firewall Rules
+   │
+Managed Instance Group
+   │
+Instance Template
+   │
+VM Instances
+   │
+VPC Network
+   │
+Subnet
+   │
+Cloud NAT
+   │
+Internet
+
+Why do we use an Instance Template?
+"An Instance Template defines the VM configuration, such as machine type, boot disk, network, startup script, and service account. It enables consistent creation of multiple VM instances and is required for Managed Instance Groups."
+Why do we use a Managed Instance Group?
+"A Managed Instance Group automatically manages identical VM instances. It supports auto healing, auto scaling, and seamless integration with Load Balancers, ensuring high availability."
